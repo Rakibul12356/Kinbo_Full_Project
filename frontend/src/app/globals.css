@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand Color Palette */
+  --primary: #082F6B;
+  --secondary: #FF6B00;
+  --hover-orange: #E85D00;
+  --light-blue-bg: #F3F7FC;
+  --light-blue: #F3F7FC;
+  --main-text: #1F2937;
+  --border: #E5E7EB;
+
+  --background: #F3F7FC;
+  --foreground: #1F2937;
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-hover-orange: var(--hover-orange);
+  --color-light-blue: var(--light-blue);
+  --color-main-text: var(--main-text);
+  --color-border: var(--border);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
