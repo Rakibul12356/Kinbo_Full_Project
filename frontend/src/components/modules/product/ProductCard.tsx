@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { Product } from "@/types/ecommerce";
 import { useCart } from "@/hooks/use-cart";
-import { Star, Rocket } from "lucide-react";
+import { useIsClient } from "@/hooks/use-is-client";
+import { Star, Rocket, Check } from "lucide-react";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
 
 interface ProductCardProps {
@@ -12,7 +13,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
+  const isClient = useIsClient();
+  const isAdded = isClient && isInCart(product.id);
 
   const discountPercent = calculateDiscount(product.price, product.originalPrice);
 
@@ -127,12 +130,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          {/* Action Button: Always ADD Button */}
           <button
             onClick={() => addToCart(product, 1)}
-            className="px-4 py-1.5 rounded-lg border-2 border-[#009688] text-[#00897B] hover:bg-[#009688]/10 font-bold text-xs sm:text-sm tracking-wider uppercase transition active:scale-95 cursor-pointer shadow-2xs"
+            aria-label={isAdded ? `${product.name} added — add one more` : `Add ${product.name} to cart`}
+            className={`inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg border-2 border-[#082F6B] font-bold text-xs sm:text-sm tracking-wider uppercase transition active:scale-95 cursor-pointer shadow-2xs ${
+              isAdded
+                ? "bg-[#082F6B] text-white hover:bg-[#062452]"
+                : "text-[#082F6B] hover:bg-[#082F6B]/10"
+            }`}
           >
-            ADD
+            {isAdded && <Check className="w-3.5 h-3.5" strokeWidth={3} />}
+            {isAdded ? "Added" : "Add"}
           </button>
         </div>
       </div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import AppProvider from "@/providers/app-provider";
 import CartDrawer from "@/components/modules/cart/CartDrawer";
 import SupportChatWidget from "@/components/common/SupportChatWidget";
+import StorefrontOnly from "@/components/layout/StorefrontOnly";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -40,8 +41,10 @@ export default function RootLayout({
       >
         <AppProvider>
           {children}
-          <CartDrawer />
-          <SupportChatWidget />
+          <StorefrontOnly>
+            <CartDrawer />
+            <SupportChatWidget />
+          </StorefrontOnly>
         </AppProvider>
       </body>
     </html>
