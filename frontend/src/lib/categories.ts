@@ -1,20 +1,63 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  Shirt,
-  Smartphone,
-  Sparkles,
-  CookingPot,
-  ShoppingBasket,
+  Archive,
+  Armchair,
   Baby,
+  Backpack,
+  BatteryCharging,
+  Bed,
+  BedDouble,
   BookOpen,
+  Brush,
+  Camera,
+  Coffee,
+  Cookie,
+  CookingPot,
+  Droplet,
   Dumbbell,
-  Watch,
+  Fan,
+  Footprints,
+  Gamepad2,
+  Gem,
+  Gift,
+  Glasses,
+  GraduationCap,
+  Headphones,
+  HeartPulse,
+  Keyboard,
+  Lamp,
+  Laptop,
+  Leaf,
+  Lightbulb,
+  Luggage,
+  Milk,
+  Package,
+  Palette,
+  Paperclip,
+  PenTool,
+  Puzzle,
+  Refrigerator,
+  Scissors,
+  Shirt,
+  ShoppingBag,
+  ShoppingBasket,
+  Smartphone,
+  SmartphoneCharging,
   Sofa,
+  Sparkles,
+  SprayCan,
+  Sun,
+  Tent,
+  Trophy,
+  Wallet,
+  Watch,
+  Wheat,
 } from "lucide-react";
 
 export interface Subcategory {
   name: string;
   slug: string;
+  icon: LucideIcon;
 }
 
 export interface CategoryDefinition {
@@ -26,6 +69,9 @@ export interface CategoryDefinition {
   accent: string;
   subcategories: Subcategory[];
 }
+
+/** Sub-route that lists every product of a category with the filter sidebar. */
+export const ALL_PRODUCTS_SLUG = "all";
 
 export function slugify(value: string): string {
   return value
@@ -40,7 +86,7 @@ function defineCategory(
   description: string,
   icon: LucideIcon,
   accent: string,
-  subcategories: string[]
+  subcategories: [string, LucideIcon][]
 ): CategoryDefinition {
   return {
     name,
@@ -48,7 +94,11 @@ function defineCategory(
     description,
     icon,
     accent,
-    subcategories: subcategories.map((sub) => ({ name: sub, slug: slugify(sub) })),
+    subcategories: subcategories.map(([subName, subIcon]) => ({
+      name: subName,
+      slug: slugify(subName),
+      icon: subIcon,
+    })),
   };
 }
 
@@ -59,12 +109,12 @@ export const CATEGORIES: CategoryDefinition[] = [
     Shirt,
     "bg-rose-50 text-rose-600",
     [
-      "Men's Fashion",
-      "Women's Fashion",
-      "Kids' Clothing",
-      "Shoes & Footwear",
-      "Bags & Luggage",
-      "Fashion Accessories",
+      ["Men's Fashion", Shirt],
+      ["Women's Fashion", ShoppingBag],
+      ["Kids' Clothing", Baby],
+      ["Shoes & Footwear", Footprints],
+      ["Bags & Luggage", Luggage],
+      ["Fashion Accessories", Glasses],
     ]
   ),
   defineCategory(
@@ -73,16 +123,16 @@ export const CATEGORIES: CategoryDefinition[] = [
     Smartphone,
     "bg-blue-50 text-blue-600",
     [
-      "Mobile Phones & Tablets",
-      "Mobile Accessories",
-      "Computers & Laptops",
-      "Computer Accessories",
-      "Headphones, Earbuds & Speakers",
-      "Smartwatches & Wearables",
-      "Cameras & Accessories",
-      "Gaming Accessories",
-      "Smart Home Devices",
-      "Chargers, Cables & Power Banks",
+      ["Mobile Phones & Tablets", Smartphone],
+      ["Mobile Accessories", SmartphoneCharging],
+      ["Computers & Laptops", Laptop],
+      ["Computer Accessories", Keyboard],
+      ["Headphones, Earbuds & Speakers", Headphones],
+      ["Smartwatches & Wearables", Watch],
+      ["Cameras & Accessories", Camera],
+      ["Gaming Accessories", Gamepad2],
+      ["Smart Home Devices", Lightbulb],
+      ["Chargers, Cables & Power Banks", BatteryCharging],
     ]
   ),
   defineCategory(
@@ -91,11 +141,11 @@ export const CATEGORIES: CategoryDefinition[] = [
     Sparkles,
     "bg-pink-50 text-pink-600",
     [
-      "Skincare & Sunscreen",
-      "Makeup & Cosmetics",
-      "Hair Care",
-      "Perfume & Deodorant",
-      "Men's Grooming",
+      ["Skincare & Sunscreen", Sun],
+      ["Makeup & Cosmetics", Palette],
+      ["Hair Care", Droplet],
+      ["Perfume & Deodorant", SprayCan],
+      ["Men's Grooming", Scissors],
     ]
   ),
   defineCategory(
@@ -104,11 +154,11 @@ export const CATEGORIES: CategoryDefinition[] = [
     CookingPot,
     "bg-amber-50 text-amber-600",
     [
-      "Kitchen Tools & Cookware",
-      "Storage & Organizers",
-      "Cleaning Supplies",
-      "Home Decor & Lighting",
-      "Bedsheets, Curtains & Towels",
+      ["Kitchen Tools & Cookware", CookingPot],
+      ["Storage & Organizers", Archive],
+      ["Cleaning Supplies", Brush],
+      ["Home Decor & Lighting", Lamp],
+      ["Bedsheets, Curtains & Towels", BedDouble],
     ]
   ),
   defineCategory(
@@ -117,10 +167,10 @@ export const CATEGORIES: CategoryDefinition[] = [
     ShoppingBasket,
     "bg-emerald-50 text-emerald-600",
     [
-      "Rice, Lentils, Oil & Spices",
-      "Snacks, Biscuits & Beverages",
-      "Packaged Food",
-      "Organic & Local Products",
+      ["Rice, Lentils, Oil & Spices", Wheat],
+      ["Snacks, Biscuits & Beverages", Cookie],
+      ["Packaged Food", Package],
+      ["Organic & Local Products", Leaf],
     ]
   ),
   defineCategory(
@@ -129,11 +179,11 @@ export const CATEGORIES: CategoryDefinition[] = [
     Baby,
     "bg-sky-50 text-sky-600",
     [
-      "Baby Clothing",
-      "Diapers & Baby Care",
-      "Feeding Accessories",
-      "Educational Toys & Games",
-      "School Bags & Kids' Accessories",
+      ["Baby Clothing", Shirt],
+      ["Diapers & Baby Care", Baby],
+      ["Feeding Accessories", Milk],
+      ["Educational Toys & Games", Puzzle],
+      ["School Bags & Kids' Accessories", Backpack],
     ]
   ),
   defineCategory(
@@ -142,10 +192,10 @@ export const CATEGORIES: CategoryDefinition[] = [
     BookOpen,
     "bg-indigo-50 text-indigo-600",
     [
-      "Books & Educational Materials",
-      "Notebooks, Pens & Art Supplies",
-      "School & College Supplies",
-      "Office Accessories",
+      ["Books & Educational Materials", BookOpen],
+      ["Notebooks, Pens & Art Supplies", PenTool],
+      ["School & College Supplies", GraduationCap],
+      ["Office Accessories", Paperclip],
     ]
   ),
   defineCategory(
@@ -154,10 +204,10 @@ export const CATEGORIES: CategoryDefinition[] = [
     Dumbbell,
     "bg-orange-50 text-orange-600",
     [
-      "Football, Cricket & Badminton",
-      "Gym Equipment",
-      "Yoga & Fitness Accessories",
-      "Camping & Outdoor Products",
+      ["Football, Cricket & Badminton", Trophy],
+      ["Gym Equipment", Dumbbell],
+      ["Yoga & Fitness Accessories", HeartPulse],
+      ["Camping & Outdoor Products", Tent],
     ]
   ),
   defineCategory(
@@ -165,7 +215,13 @@ export const CATEGORIES: CategoryDefinition[] = [
     "Watches, sunglasses, wallets, jewelry and thoughtful gift items.",
     Watch,
     "bg-violet-50 text-violet-600",
-    ["Watches", "Sunglasses", "Wallets & Belts", "Fashion Jewelry", "Gift Items"]
+    [
+      ["Watches", Watch],
+      ["Sunglasses", Glasses],
+      ["Wallets & Belts", Wallet],
+      ["Fashion Jewelry", Gem],
+      ["Gift Items", Gift],
+    ]
   ),
   defineCategory(
     "Home Appliances & Furniture",
@@ -173,11 +229,11 @@ export const CATEGORIES: CategoryDefinition[] = [
     Sofa,
     "bg-teal-50 text-teal-600",
     [
-      "Electric Kettle, Blender & Rice Cooker",
-      "Fans & Small Appliances",
-      "Refrigerators & Washing Machines",
-      "Chairs, Tables & Shelves",
-      "Mattresses & Furniture",
+      ["Electric Kettle, Blender & Rice Cooker", Coffee],
+      ["Fans & Small Appliances", Fan],
+      ["Refrigerators & Washing Machines", Refrigerator],
+      ["Chairs, Tables & Shelves", Armchair],
+      ["Mattresses & Furniture", Bed],
     ]
   ),
 ];
@@ -197,4 +253,9 @@ export function getSubcategory(
 
 export function categoryHref(categorySlug: string, subSlug?: string): string {
   return subSlug ? `/category/${categorySlug}/${subSlug}` : `/category/${categorySlug}`;
+}
+
+/** Listing page with every product of the category (used by "see all" links). */
+export function categoryListingHref(categorySlug: string): string {
+  return categoryHref(categorySlug, ALL_PRODUCTS_SLUG);
 }

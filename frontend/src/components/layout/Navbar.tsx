@@ -351,14 +351,16 @@ export default function Navbar({ onSearchChange }: NavbarProps) {
           >
             <ul className="max-h-[70vh] overflow-y-auto rounded-2xl border border-[#E5E7EB] bg-white py-2 shadow-xl animate-in fade-in slide-in-from-top-1 duration-150">
               {[
-                { name: "All", href: categoryHref(openCategory.slug), isAll: true },
+                { name: "All", href: categoryHref(openCategory.slug), isAll: true, icon: LayoutGrid },
                 ...openCategory.subcategories.map((sub) => ({
                   name: sub.name,
                   href: categoryHref(openCategory.slug, sub.slug),
                   isAll: false,
+                  icon: sub.icon,
                 })),
               ].map((item) => {
                 const isItemActive = pathname === item.href;
+                const ItemIcon = item.icon;
                 return (
                   <li key={item.href}>
                     <Link
@@ -375,11 +377,7 @@ export default function Navbar({ onSearchChange }: NavbarProps) {
                           item.isAll ? "bg-[#F8FAFC] text-zinc-400" : openCategory.accent
                         }`}
                       >
-                        {item.isAll ? (
-                          <LayoutGrid className="w-4 h-4" />
-                        ) : (
-                          <openCategory.icon className="w-4 h-4" />
-                        )}
+                        <ItemIcon className="w-4 h-4" />
                       </span>
                       <span className="flex-1 leading-snug">{item.name}</span>
                       {!item.isAll && (
