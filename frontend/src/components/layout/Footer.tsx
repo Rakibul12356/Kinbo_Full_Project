@@ -112,26 +112,28 @@ export default function Footer() {
         <div className="space-y-12 sm:space-y-14">
           {/* Row 1: Logo + value propositions */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-            <div className="space-y-4">
-              <Link href="/" className="inline-flex items-center" aria-label="Kinbo home">
-                <div className="relative w-36 sm:w-40 h-11 overflow-hidden flex items-center justify-center">
+            <div className="space-y-5">
+              <div className="h-12 flex items-center">
+                <Link href="/" className="inline-flex items-center" aria-label="Kinbo home">
                   <Image
-                    src="/images/logo.png"
+                    src="/images/logo-trimmed.png"
                     alt="Kinbo"
-                    width={260}
-                    height={260}
-                    className="w-auto h-28 object-contain"
+                    width={130}
+                    height={36}
+                    className="h-8 sm:h-9 w-auto object-contain"
                     priority
                   />
-                </div>
-              </Link>
+                </Link>
+              </div>
               <p className="text-sm text-zinc-700 leading-relaxed max-w-xs">
                 The Premier Multi-Category E-Commerce Platform for Bangladesh.
               </p>
             </div>
 
             <div className="space-y-5">
-              <BadgeCheck className="w-12 h-12 text-[#006AFF]" strokeWidth={1.75} />
+              <div className="h-12 flex items-center">
+                <BadgeCheck className="w-12 h-12 text-[#006AFF]" strokeWidth={1.75} />
+              </div>
               <p className="text-sm text-zinc-700 leading-relaxed max-w-xs">
                 Authentic products sourced from verified manufacturers, distributors and
                 importers.
@@ -139,15 +141,19 @@ export default function Footer() {
             </div>
 
             <div className="space-y-5">
-              <Users className="w-12 h-12 text-teal-700" strokeWidth={2} fill="currentColor" />
+              <div className="h-12 flex items-center">
+                <Users className="w-12 h-12 text-teal-700" strokeWidth={2} fill="currentColor" />
+              </div>
               <p className="text-sm text-zinc-700 leading-relaxed max-w-xs">
                 Our customers are at the heart of everything we do, with dedicated 24/7 care.
               </p>
             </div>
 
             <div className="space-y-5">
-              <div className="w-12 h-12 rounded-xl bg-indigo-700 text-white flex items-center justify-center">
-                <Code2 className="w-7 h-7" />
+              <div className="h-12 flex items-center">
+                <div className="w-12 h-12 rounded-xl bg-indigo-700 text-white flex items-center justify-center">
+                  <Code2 className="w-7 h-7" />
+                </div>
               </div>
               <p className="text-sm text-zinc-700 leading-relaxed max-w-xs">
                 We innovate with cutting-edge technology to deliver the highest standards of
