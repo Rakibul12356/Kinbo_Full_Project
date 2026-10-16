@@ -2,8 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import { Package, Truck, CheckCircle2, ChevronRight, ArrowLeft } from "lucide-react";
 
 export default function OrdersPage() {
@@ -27,8 +26,7 @@ export default function OrdersPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#F3F7FC]">
-      <Navbar />
+    <PageLayout className="bg-[#F3F7FC]">
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-10 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
@@ -99,8 +97,6 @@ export default function OrdersPage() {
           ))}
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import {
   Mail,
   Phone,
@@ -28,8 +27,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+    <PageLayout>
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-12">
         <div className="max-w-4xl mx-auto space-y-12">
@@ -139,8 +137,6 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

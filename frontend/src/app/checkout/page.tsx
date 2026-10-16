@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import { useCart } from "@/hooks/use-cart";
 import { formatPrice } from "@/lib/utils";
 import {
@@ -37,8 +36,7 @@ export default function CheckoutPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col justify-between">
-        <Navbar />
+      <PageLayout>
         <main className="flex-1 container mx-auto px-4 py-16 text-center">
           <div className="max-w-md mx-auto bg-white p-8 rounded-2xl border border-[#E5E7EB] shadow-xs space-y-4">
             <h2 className="text-xl font-bold text-[#1F2937]">Your cart is empty</h2>
@@ -54,14 +52,12 @@ export default function CheckoutPage() {
             </Link>
           </div>
         </main>
-        <Footer />
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+    <PageLayout>
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center gap-2 text-xs text-zinc-500 mb-6">
@@ -219,8 +215,6 @@ export default function CheckoutPage() {
           </div>
         </form>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

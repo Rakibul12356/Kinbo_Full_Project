@@ -2,8 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import { useCart } from "@/hooks/use-cart";
 import { formatPrice } from "@/lib/utils";
 import {
@@ -24,8 +23,7 @@ export default function CartPage() {
   const total = subtotal + shipping + tax;
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+    <PageLayout>
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-10">
         {/* Breadcrumb */}
@@ -190,8 +188,6 @@ export default function CartPage() {
           </div>
         )}
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

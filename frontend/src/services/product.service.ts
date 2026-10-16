@@ -1,5 +1,12 @@
 import apiClient from "@/lib/axios";
+import { CATEGORY_NAMES } from "@/lib/categories";
 import { Product } from "@/types/ecommerce";
+
+export interface ProductFilterParams {
+  category?: string;
+  subcategory?: string;
+  search?: string;
+}
 
 // Fallback demo products for initial UI presentation if backend is not yet running
 export const DEMO_PRODUCTS: Product[] = [
@@ -10,7 +17,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "High quality durum wheat pasta, enriched with natural nutrients and perfect for authentic family meals.",
     price: 160,
     originalPrice: 180,
-    category: "Groceries",
+    category: "Grocery & Food",
+    subcategory: "Packaged Food",
     rating: 5.0,
     reviewCount: 6,
     images: [
@@ -29,7 +37,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Imported authentic Italian linguine crafted from selected non-GMO durum wheat for the best al dente texture.",
     price: 399,
     originalPrice: 449,
-    category: "Groceries",
+    category: "Grocery & Food",
+    subcategory: "Packaged Food",
     rating: 0,
     reviewCount: 0,
     images: [
@@ -48,7 +57,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Premium spatial audio, active noise cancellation with 40-hour battery life and ultra-comfortable memory foam ear cushions.",
     price: 2490,
     originalPrice: 3290,
-    category: "Electronics",
+    category: "Electronics & Gadgets",
+    subcategory: "Headphones, Earbuds & Speakers",
     rating: 4.9,
     reviewCount: 342,
     images: [
@@ -68,7 +78,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Swiss movement, sapphire crystal glass with genuine Italian leather strap. Water-resistant up to 50 meters.",
     price: 1890,
     originalPrice: 2400,
-    category: "Accessories",
+    category: "Watches, Jewelry & Accessories",
+    subcategory: "Watches",
     rating: 4.8,
     reviewCount: 128,
     images: [
@@ -87,7 +98,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Double-walled vacuum insulated stainless steel tumbler. Keeps drinks cold for 24 hours or piping hot for 12 hours.",
     price: 34.5,
     originalPrice: 45.0,
-    category: "Lifestyle",
+    category: "Home & Kitchen",
+    subcategory: "Kitchen Tools & Cookware",
     rating: 4.7,
     reviewCount: 95,
     images: [
@@ -104,7 +116,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Hot-swappable tactile switches, aircraft-grade aluminum frame, PBT keycaps, and customizable per-key dynamic RGB lighting.",
     price: 139.99,
     originalPrice: 179.99,
-    category: "Electronics",
+    category: "Electronics & Gadgets",
+    subcategory: "Computer Accessories",
     rating: 4.9,
     reviewCount: 512,
     images: [
@@ -121,7 +134,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Breathable engineered mesh upper, responsive energy-return foam cushioning, and high-traction rubber outsole.",
     price: 119.0,
     originalPrice: 149.0,
-    category: "Footwear",
+    category: "Fashion & Clothing",
+    subcategory: "Shoes & Footwear",
     rating: 4.6,
     reviewCount: 210,
     images: [
@@ -138,7 +152,8 @@ export const DEMO_PRODUCTS: Product[] = [
     description: "Waterproof ballistic nylon, padded 16-inch laptop compartment, hidden anti-theft pockets, and ergonomic airflow back panel.",
     price: 89.99,
     originalPrice: 115.0,
-    category: "Accessories",
+    category: "Fashion & Clothing",
+    subcategory: "Bags & Luggage",
     rating: 4.8,
     reviewCount: 184,
     images: [
@@ -148,11 +163,102 @@ export const DEMO_PRODUCTS: Product[] = [
     isFeatured: false,
     tags: ["Travel", "Gear"],
   },
+  {
+    id: "prod-7",
+    name: "HydraGlow SPF 50 Daily Sunscreen Gel 50ml",
+    slug: "hydraglow-spf50-sunscreen",
+    description: "Lightweight, non-greasy broad spectrum sunscreen with hyaluronic acid. Ideal for humid weather and oily skin.",
+    price: 690,
+    originalPrice: 850,
+    category: "Beauty & Personal Care",
+    subcategory: "Skincare & Sunscreen",
+    rating: 4.7,
+    reviewCount: 76,
+    images: [
+      "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&auto=format&fit=crop&q=80",
+    ],
+    stock: 60,
+    discountType: "ribbon",
+    tags: ["Skincare", "SPF"],
+  },
+  {
+    id: "prod-8",
+    name: "Little Builder Wooden Stacking Blocks (30 pcs)",
+    slug: "little-builder-wooden-blocks",
+    description: "Non-toxic, colorful wooden blocks that build motor skills, creativity and early counting for ages 2+.",
+    price: 950,
+    originalPrice: 1200,
+    category: "Baby, Kids & Toys",
+    subcategory: "Educational Toys & Games",
+    rating: 4.9,
+    reviewCount: 41,
+    images: [
+      "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&auto=format&fit=crop&q=80",
+    ],
+    stock: 25,
+    tags: ["Toys", "Learning"],
+  },
+  {
+    id: "prod-9",
+    name: "ScholarPro A5 Hardcover Notebook (Pack of 3)",
+    slug: "scholarpro-a5-notebook-pack",
+    description: "Premium 100 GSM ruled pages with lay-flat binding, perfect for students, journaling and office notes.",
+    price: 420,
+    originalPrice: 500,
+    category: "Books, Stationery & Office Supplies",
+    subcategory: "Notebooks, Pens & Art Supplies",
+    rating: 4.6,
+    reviewCount: 58,
+    images: [
+      "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=800&auto=format&fit=crop&q=80",
+    ],
+    stock: 80,
+    discountType: "lightning",
+    tags: ["Stationery", "Notebook"],
+  },
+  {
+    id: "prod-10",
+    name: "FlexCore Anti-Slip Yoga Mat 6mm",
+    slug: "flexcore-yoga-mat-6mm",
+    description: "High-density TPE yoga mat with dual-sided grip, alignment lines and a free carrying strap.",
+    price: 1450,
+    originalPrice: 1800,
+    category: "Sports, Fitness & Outdoor",
+    subcategory: "Yoga & Fitness Accessories",
+    rating: 4.8,
+    reviewCount: 97,
+    images: [
+      "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=800&auto=format&fit=crop&q=80",
+    ],
+    stock: 35,
+    tags: ["Yoga", "Fitness"],
+  },
+  {
+    id: "prod-11",
+    name: "BrewMate 1.8L Stainless Steel Electric Kettle",
+    slug: "brewmate-electric-kettle",
+    description: "1500W rapid boil kettle with auto shut-off, boil-dry protection and a 360° cordless base.",
+    price: 1650,
+    originalPrice: 2100,
+    category: "Home Appliances & Furniture",
+    subcategory: "Electric Kettle, Blender & Rice Cooker",
+    rating: 4.5,
+    reviewCount: 132,
+    images: [
+      "https://images.unsplash.com/photo-1594213114663-d94db9b17125?w=800&auto=format&fit=crop&q=80",
+    ],
+    stock: 22,
+    discountType: "ribbon",
+    tags: ["Appliance", "Kitchen"],
+  },
 ];
+
+const equalsIgnoreCase = (a?: string, b?: string) =>
+  Boolean(a && b && a.toLowerCase() === b.toLowerCase());
 
 export const productService = {
   // Fetch all products with fallback to demo data
-  async getProducts(params?: { category?: string; search?: string }): Promise<Product[]> {
+  async getProducts(params?: ProductFilterParams): Promise<Product[]> {
     try {
       const response = await apiClient.get<Product[]>("/products", { params });
       return response.data;
@@ -160,9 +266,10 @@ export const productService = {
       // Graceful fallback to demo products when backend is offline
       let products = [...DEMO_PRODUCTS];
       if (params?.category && params.category !== "All") {
-        products = products.filter(
-          (p) => p.category.toLowerCase() === params.category?.toLowerCase()
-        );
+        products = products.filter((p) => equalsIgnoreCase(p.category, params.category));
+      }
+      if (params?.subcategory) {
+        products = products.filter((p) => equalsIgnoreCase(p.subcategory, params.subcategory));
       }
       if (params?.search) {
         const query = params.search.toLowerCase();
@@ -196,7 +303,7 @@ export const productService = {
       const response = await apiClient.get<string[]>("/categories");
       return response.data;
     } catch {
-      return ["All", "Electronics", "Accessories", "Footwear", "Lifestyle"];
+      return ["All", ...CATEGORY_NAMES];
     }
   },
 };

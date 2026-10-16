@@ -1,13 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import { Compass, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+    <PageLayout>
 
       <main className="flex-1 flex items-center justify-center py-16 px-4">
         <div className="max-w-md w-full text-center space-y-6">
@@ -40,8 +38,6 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

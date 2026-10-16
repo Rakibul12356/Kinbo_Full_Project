@@ -1,15 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import { CheckCircle2, ShoppingBag } from "lucide-react";
 
 export default function CheckoutSuccessPage() {
   const orderNumber = "KB-849201";
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar />
+    <PageLayout>
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-16 flex items-center justify-center">
         <div className="max-w-lg w-full bg-white rounded-3xl border border-[#E5E7EB] p-8 sm:p-10 text-center shadow-lg space-y-6">
@@ -57,8 +55,6 @@ export default function CheckoutSuccessPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

@@ -118,8 +118,9 @@ export default function Footer() {
                   <Image
                     src="/images/logo-trimmed.png"
                     alt="Kinbo"
-                    width={130}
+                    width={131}
                     height={36}
+                    style={{ width: "auto" }}
                     className="h-8 sm:h-9 w-auto object-contain"
                     priority
                   />

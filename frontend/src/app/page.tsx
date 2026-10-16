@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/components/layout/Navbar";
+import PageLayout from "@/components/layout/PageLayout";
 import HeroBanner from "@/components/modules/home/HeroBanner";
 import FeaturedSection from "@/components/modules/home/FeaturedSection";
 import ProductFilters from "@/components/modules/product/ProductFilters";
 import ProductGrid from "@/components/modules/product/ProductGrid";
-import Footer from "@/components/layout/Footer";
 import { useProducts, useCategories } from "@/hooks/use-products";
+import { CATEGORY_NAMES } from "@/lib/categories";
 import { Layers } from "lucide-react";
 
 export default function HomePage() {
@@ -15,8 +15,7 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("featured");
 
-  const { data: categories = ["All", "Electronics", "Accessories", "Footwear", "Lifestyle"] } =
-    useCategories();
+  const { data: categories = ["All", ...CATEGORY_NAMES] } = useCategories();
 
   const { data: products = [], isLoading } = useProducts({
     category: selectedCategory === "All" ? undefined : selectedCategory,
@@ -39,12 +38,7 @@ export default function HomePage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar
-        onSearchChange={setSearchQuery}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-      />
+    <PageLayout onSearchChange={setSearchQuery}>
 
       <main className="flex-1">
         <HeroBanner onExploreClick={handleExploreClick} />
@@ -77,8 +71,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

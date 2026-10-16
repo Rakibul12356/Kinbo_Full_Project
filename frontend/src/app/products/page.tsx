@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import ProductFilters from "@/components/modules/product/ProductFilters";
 import ProductGrid from "@/components/modules/product/ProductGrid";
 import { useProducts, useCategories } from "@/hooks/use-products";
+import { CATEGORY_NAMES } from "@/lib/categories";
 import { ShoppingBag, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -14,8 +14,7 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("featured");
 
-  const { data: categories = ["All", "Electronics", "Accessories", "Footwear", "Lifestyle"] } =
-    useCategories();
+  const { data: categories = ["All", ...CATEGORY_NAMES] } = useCategories();
 
   const { data: products = [], isLoading } = useProducts({
     category: selectedCategory === "All" ? undefined : selectedCategory,
@@ -30,12 +29,7 @@ export default function ProductsPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
-      <Navbar
-        onSearchChange={setSearchQuery}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-      />
+    <PageLayout onSearchChange={setSearchQuery}>
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-10">
         {/* Breadcrumb */}
@@ -78,8 +72,6 @@ export default function ProductsPage() {
           <ProductGrid products={sortedProducts} isLoading={isLoading} />
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }

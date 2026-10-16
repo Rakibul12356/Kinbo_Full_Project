@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import PageLayout from "@/components/layout/PageLayout";
 import {
   User,
   Camera,
@@ -65,8 +64,7 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#F8FAFC]">
-      <Navbar />
+    <PageLayout className="bg-[#F8FAFC]">
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-6 sm:py-8 ">
         {/* Breadcrumb */}
@@ -300,8 +298,6 @@ export default function AccountPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
-    </div>
+    </PageLayout>
   );
 }
