@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
+  Home,
   LayoutGrid,
 } from "lucide-react";
 
@@ -280,18 +281,18 @@ export default function Navbar({ onSearchChange }: NavbarProps) {
                   className="flex items-center gap-6 sm:gap-7 overflow-x-auto scrollbar-none scroll-smooth"
                 >
                   <Link
-                    href="/categories"
+                    href="/"
                     onMouseEnter={closeMegaMenu}
                     tabIndex={isCategoryBarHidden ? -1 : 0}
                     className={`relative shrink-0 inline-flex items-center gap-1.5 py-3.5 text-sm whitespace-nowrap transition ${
-                      pathname === "/categories"
+                      pathname === "/"
                         ? "font-semibold text-[#082F6B]"
                         : "font-medium text-[#1F2937] hover:text-[#082F6B]"
                     }`}
                   >
-                    <LayoutGrid className="w-4 h-4" />
-                    All Categories
-                    {pathname === "/categories" && (
+                    <Home className="w-4 h-4" />
+                    Home
+                    {pathname === "/" && (
                       <span className="absolute left-0 right-0 bottom-0 h-0.5 rounded-full bg-[#FF6B00]" />
                     )}
                   </Link>

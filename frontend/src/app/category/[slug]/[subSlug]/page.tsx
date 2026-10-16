@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProductListing from "@/components/modules/product/ProductListing";
+import type { FilterSectionConfig } from "@/components/filters/filter-config";
 import {
   ALL_PRODUCTS_SLUG,
   CATEGORIES,
@@ -43,13 +44,34 @@ export default async function SubcategoryPage({ params }: PageProps) {
   const subcategory = isAll ? undefined : getSubcategory(category, subSlug);
   if (!isAll && !subcategory) notFound();
 
-  const sidebarLinks = [
-    { label: `All ${category.name}`, href: categoryListingHref(category.slug), active: isAll },
-    ...category.subcategories.map((sub) => ({
-      label: sub.name,
-      href: categoryHref(category.slug, sub.slug),
-      active: sub.slug === subcategory?.slug,
-    })),
+  const filterSections: FilterSectionConfig[] = [
+    {
+      type: "links",
+      title: category.name,
+      links: [
+        { label: `All ${category.name}`, href: categoryListingHref(category.slug), active: isAll },
+        ...category.subcategories.map((sub) => ({
+          label: sub.name,
+          href: categoryHref(category.slug, sub.slug),
+          active: sub.slug === subcategory?.slug,
+        })),
+      ],
+    },
+    { type: "price" },
+    { type: "discount" },
+    { type: "rating" },
+    ...(isAll
+      ? [{ type: "facet", id: "subcategory", title: "Category", field: "subcategory" } as const]
+      : []),
+    {
+      type: "facet",
+      id: "tags",
+      title: "Product Tags",
+      field: "tags",
+      searchable: true,
+      searchPlaceholder: "Select Tags",
+    },
+    { type: "availability" },
   ];
 
   return (
@@ -60,8 +82,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
         { label: subcategory?.name ?? "All Products" },
       ]}
       query={{ category: category.name, subcategory: subcategory?.name }}
-      sidebarTitle={category.name}
-      sidebarLinks={sidebarLinks}
+      filterSections={filterSections}
     />
   );
 }

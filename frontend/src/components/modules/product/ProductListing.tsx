@@ -4,15 +4,31 @@ import React, { useState } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import Breadcrumbs, { type BreadcrumbItem } from "@/components/common/Breadcrumbs";
 import ProductGrid from "@/components/modules/product/ProductGrid";
-import FilterSidebar, {
-  DEFAULT_PRODUCT_FILTERS,
-  applyProductFilters,
-  type FilterLink,
-  type ProductFilterState,
-} from "@/components/modules/product/FilterSidebar";
+import FilterSidebar from "@/components/filters/FilterSidebar";
+import {
+  EMPTY_FILTER_STATE,
+  applyFilters,
+  type FilterSectionConfig,
+  type FilterState,
+} from "@/components/filters/filter-config";
 import { useProducts } from "@/hooks/use-products";
 import type { ProductFilterParams } from "@/services/product.service";
 import { ArrowUpDown, SlidersHorizontal, X } from "lucide-react";
+
+export const DEFAULT_FILTER_SECTIONS: FilterSectionConfig[] = [
+  { type: "price" },
+  { type: "discount" },
+  { type: "rating" },
+  {
+    type: "facet",
+    id: "tags",
+    title: "Product Tags",
+    field: "tags",
+    searchable: true,
+    searchPlaceholder: "Select Tags",
+  },
+  { type: "availability" },
+];
 
 interface ProductListingProps {
   title: string;
@@ -20,8 +36,8 @@ interface ProductListingProps {
   breadcrumbs: BreadcrumbItem[];
   /** Server-side product query, e.g. `{ category, subcategory }`. */
   query?: ProductFilterParams;
-  sidebarTitle?: string;
-  sidebarLinks?: FilterLink[];
+  /** Sidebar sections in display order; defaults to price, discount, rating, tags, availability. */
+  filterSections?: FilterSectionConfig[];
 }
 
 export default function ProductListing({
@@ -29,12 +45,11 @@ export default function ProductListing({
   description,
   breadcrumbs,
   query,
-  sidebarTitle,
-  sidebarLinks,
+  filterSections = DEFAULT_FILTER_SECTIONS,
 }: ProductListingProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("featured");
-  const [filters, setFilters] = useState<ProductFilterState>(DEFAULT_PRODUCT_FILTERS);
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTER_STATE);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const { data: products = [], isLoading } = useProducts({
@@ -42,7 +57,7 @@ export default function ProductListing({
     search: searchQuery || undefined,
   });
 
-  const visibleProducts = applyProductFilters(products, filters).sort((a, b) => {
+  const visibleProducts = applyFilters(products, filterSections, filters).sort((a, b) => {
     if (sortBy === "price-low") return a.price - b.price;
     if (sortBy === "price-high") return b.price - a.price;
     if (sortBy === "rating") return b.rating - a.rating;
@@ -50,13 +65,7 @@ export default function ProductListing({
   });
 
   const sidebar = (
-    <FilterSidebar
-      linksTitle={sidebarTitle}
-      links={sidebarLinks}
-      filters={filters}
-      onChange={setFilters}
-      onReset={() => setFilters(DEFAULT_PRODUCT_FILTERS)}
-    />
+    <FilterSidebar sections={filterSections} products={products} state={filters} onChange={setFilters} />
   );
 
   return (
@@ -64,8 +73,10 @@ export default function ProductListing({
       <main className="flex-1 container mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <Breadcrumbs items={breadcrumbs} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 lg:gap-8">
-          <aside className="hidden lg:block lg:sticky lg:top-28 lg:self-start">{sidebar}</aside>
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 lg:gap-8">
+          <aside className="hidden lg:block lg:self-start">
+            {sidebar}
+          </aside>
 
           <section className="min-w-0 space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-[#E5E7EB]">
