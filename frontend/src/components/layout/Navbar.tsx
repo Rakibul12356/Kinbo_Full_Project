@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/hooks/use-cart";
+import { useIsClient } from "@/hooks/use-is-client";
 import { CATEGORIES, categoryHref } from "@/lib/categories";
 import {
   ShoppingCart,
@@ -28,8 +29,6 @@ const SHOW_BEFORE_PX = 10;
 const MEGA_MENU_CLOSE_DELAY_MS = 150;
 const DROPDOWN_WIDTH_PX = 300;
 
-const emptySubscribe = () => () => {};
-
 interface NavbarProps {
   onSearchChange?: (query: string) => void;
 }
@@ -39,11 +38,7 @@ export default function Navbar({ onSearchChange }: NavbarProps) {
   const pathname = usePathname();
   const [searchInput, setSearchInput] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isClient = useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
+  const isClient = useIsClient();
 
   const [isCategoryBarHidden, setIsCategoryBarHidden] = useState(false);
   const categoryScrollRef = useRef<HTMLDivElement>(null);

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Product } from "@/types/ecommerce";
 import { useCart } from "@/hooks/use-cart";
+import { useIsClient } from "@/hooks/use-is-client";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
 import {
   Star,
@@ -17,18 +18,15 @@ import {
 } from "lucide-react";
 
 export default function ProductDetailClient({ product }: { product: Product }) {
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
+  const isClient = useIsClient();
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(product.images[0]);
-  const [isAdded, setIsAdded] = useState(false);
+  const isAdded = isClient && isInCart(product.id);
 
   const discountPercent = calculateDiscount(product.price, product.originalPrice);
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
-  };
+  const handleAddToCart = () => addToCart(product, quantity);
 
   return (
     <div>
@@ -177,12 +175,16 @@ export default function ProductDetailClient({ product }: { product: Product }) {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
-                className="flex-1 py-3.5 px-6 rounded-xl bg-[#082F6B] hover:bg-[#062452] disabled:opacity-50 text-white font-semibold text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer"
+                className={`flex-1 py-3.5 px-6 rounded-xl border-2 border-[#082F6B] disabled:opacity-50 font-semibold text-sm flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer ${
+                  isAdded
+                    ? "bg-[#082F6B] hover:bg-[#062452] text-white shadow-md"
+                    : "bg-white text-[#082F6B] hover:bg-[#082F6B]/5"
+                }`}
               >
                 {isAdded ? (
                   <>
-                    <Check className="w-5 h-5 text-emerald-400" />
-                    <span>Added to Cart!</span>
+                    <Check className="w-5 h-5" strokeWidth={3} />
+                    <span>Added to Cart</span>
                   </>
                 ) : (
                   <>
