@@ -15,6 +15,7 @@ Ei document-e Kinbo e-commerce-er **frontend** (`frontend/` folder) kivabe banan
 | Server state | **TanStack Query v5** (+ Devtools) | API data fetch, cache, loading state |
 | HTTP client | **Axios** | Backend API call |
 | Icons | **lucide-react** | Sob icon |
+| Toast | **react-toastify v11** | Add to cart notification |
 | Lint | ESLint 9 + `eslint-config-next` | Code quality |
 
 `next.config.ts`-e duto important setting on ache:
@@ -384,11 +385,53 @@ Backend ekhono ready na, tai API fail hole demo data dey — UI sob shomoy kaj k
 
 ## 10. Client State — Cart (`context/cart-context.tsx`)
 
-- `CartProvider` React Context — `cart`, `addToCart`, `removeFromCart`, `updateQuantity`, `clearCart`, `totalItems`, `subtotal`, `isCartOpen`, `setIsCartOpen`।
+- `CartProvider` React Context — `cart`, `addToCart`, `isInCart`, `removeFromCart`, `updateQuantity`, `clearCart`, `totalItems`, `subtotal`, `isCartOpen`, `setIsCartOpen`।
 - `localStorage`-er `shopping_cart` key-e save hoy, page reload-e thake।
-- `addToCart` korle drawer nijei khule।
+- `addToCart` korle drawer khole na — **react-toastify** diye toast dekhay ("Added to cart" / "Quantity updated in cart" + "View Cart" button, jeta drawer khole)। Ek product bar bar add korle notun toast na eshe ager toast-tai update hoy।
+- `ToastContainer` `AppProvider`-e (top-right, 2.5s)। Toast-er primary color `globals.css`-e `--toastify-color-success` override kore deya।
+- `isInCart(id)` diye button-er state: cart-e thakle `ProductCard` ar detail page-er button primary color-e full hoye **"Added"** dekhay; abar click korle quantity barbe।
+- Cart `localStorage` theke ashe, tai "Added" state `useIsClient()` (`hooks/use-is-client.ts`) diye shudhu hydration-er pore dekhai — noyto server/client HTML mismatch hoto।
 - Use: `const { addToCart } = useCart()` (`hooks/use-cart.ts`)।
-- Navbar-er badge hydration mismatch erate `useSyncExternalStore` diye shudhu client-e count dekhay।
+- Navbar-er badge-o hydration mismatch erate `useIsClient()` diye shudhu client-e count dekhay।
+
+---
+
+## 10b. Vendor & Admin Auth (frontend mock)
+
+Backend auth ekhono nei, tai sob kichu `localStorage`-er `kinbo_mock_auth` key-e thake (`lib/auth/auth-store.ts`)। Backend ashle ei file-er function-gulo API call diye replace korlei hobe — UI bodlate hobe na।
+
+**Demo account** (`lib/auth/demo-accounts.ts`):
+
+| Role | Email | Password | Obostha |
+|---|---|---|---|
+| Verified vendor | `verified@kinbo.com` | `Vendor@123` | Approved → Dashboard |
+| Unverified vendor | `pending@kinbo.com` | `Vendor@123` | Admin review pending |
+| Admin | `admin@kinbo.com` | `Admin@123` | Application approve/reject |
+
+Login page-er "Demo accounts" box-e click korle form bhore jay। "Reset demo data" button sob ager obosthay ferot ney।
+
+**Vendor flow (5 step):**
+
+| Step | Route | Ki hoy |
+|---|---|---|
+| 1. Signup | `/vendor/signup` | Full name, email, BD phone, password (strength meter), terms |
+| 2. Verify | `/vendor/verify` | 6-digit OTP (paste, resend 30s)। Demo-te code page-ei dekhay। Verify hole → login (email prefilled) |
+| 3. Store info | `/vendor/onboarding` | 6 section + bam-e sticky progress nav: **Store** (name, type, description, category ≤3 — logo/banner nei, karon shob product Kinbo brand-e bikri hoy) · **Contact** (signup email/phone locked "Verified · Primary", +2 extra email/phone) · **Address** (address, area, city, postal code) · **NID** (number + front* + back* image, owner photo) · **Documents** (trade license number + copy — individual chara required; e-TIN — limited company-te required; other docs ≤5) · **Payment** (bank/bKash/Nagad, routing no., cheque/screenshot proof, "pore add korbo") |
+| 4. Review | `/vendor/status` | Pending / Approved / Rejected + timeline; rejected hole admin-er reason + "Edit & Resubmit" (form prefilled) |
+| 5. Dashboard | `/vendor/dashboard` | Shudhu approved vendor; sidebar + header shell, baki page "Soon" |
+
+**Guard:** protita page `RouteGuard step="..."` diye wrap kora (`components/auth/RouteGuard.tsx`)। `vendorHomeRoute(vendor)` thik kore vendor ekhon kon step-e — keu step skip korte parbe na (jemon pending vendor `/vendor/dashboard`-e gele `/vendor/status`-e chole jay)। Auth state `useSyncExternalStore` diye pora, server-e `ready: false`, tai hydration mismatch hoy na।
+
+**Admin:** `/admin/login`, `/admin/dashboard` (count card + recent applications), `/admin/vendors` (tab filter, table, Review modal-e Approve / Reject with reason)।
+
+**Common component:**
+- `components/auth/AuthLayout` — split-screen (bam-e brand panel, dan-e form); `step` dile stepper, `wide` dile lomba form-er jonno centered layout, `variant="admin"`।
+- `components/auth/LoginForm` — vendor ar admin duijon-i use kore (`onSubmit`, `demoAccounts` props)।
+- `components/dashboard/DashboardShell` — sidebar + header (search, notification, user menu/sign out)। Nav `components/dashboard/nav-config.ts`-e; `soon: true` item disabled thake। Notun page banale shudhu `soon` muche din।
+- `components/forms/` — `FileUploadField` (single file, preview, drag & drop, replace/remove, `aspect="card" | "square" | "wide"`), `MultiValueField` (email/phone list, prothom-ta lock), `SelectField`।
+- Image upload `lib/file-utils.ts`-er `toUploadedFile` diye ~1000px JPEG-e compress hoy, jate `localStorage`-e fit kore; PDF-er shudhu nam/size thake। Backend ashle ekhane file upload API boshabe।
+- Form logic (`views/vendor/onboarding/form-model.ts`) — values, validation, section completion; `lib/auth/store-utils.ts`-er `storeDocuments()` status page ar admin `DocumentGallery`-te sob document label shoho dey।
+- `/vendor` ar `/admin` route-e cart drawer ar support chat lukano thake (`components/layout/StorefrontOnly.tsx`)।
 
 ---
 
