@@ -33,6 +33,15 @@ body {
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
+/* react-toastify injects its own :root variables at runtime, so this needs higher specificity. */
+:root:root {
+  --toastify-color-success: var(--primary);
+  --toastify-color-progress-success: var(--primary);
+  --toastify-color-info: var(--primary);
+  --toastify-color-progress-info: var(--primary);
+  --toastify-font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
 @utility scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {
